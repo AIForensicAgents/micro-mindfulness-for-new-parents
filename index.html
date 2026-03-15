@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Micro-Mindfulness for New Parents</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        sage: { 50:'#f6f7f4', 100:'#e8ebe3', 200:'#d1d7c7', 300:'#b3bda3', 400:'#95a27f', 500:'#7a8966', 600:'#606d50', 700:'#4d5741', 800:'#404836', 900:'#373e30' },
+        blush: { 50:'#fdf5f3', 100:'#fbe8e3', 200:'#f9d5cc', 300:'#f3b5a7', 400:'#ea8c77', 500:'#e06a4f', 600:'#cc4f33', 700:'#ab3f28', 800:'#8d3724', 900:'#7b3324' },
+        lavender: { 50:'#f8f6fb', 100:'#efe9f5', 200:'#e2d6ed', 300:'#cdb8df', 400:'#b393cd', 500:'#9a72bb', 600:'#8258a4', 700:'#6c4788', 800:'#5b3d71', 900:'#4c345d' },
+        cream: { 50:'#fffdf7', 100:'#fff9eb', 200:'#fef0cc', 300:'#fde4a4', 400:'#fbd36b', 500:'#f9c13c', 600:'#e0a31d', 700:'#ba8115', 800:'#976618', 900:'#7c5419' },
+        warmgray: { 50:'#faf9f7', 100:'#f0eeeb', 200:'#e0dbd5', 300:'#ccc4bb', 400:'#b3a89c', 500:'#9d9084', 600:'#8a7c70', 700:'#72665c', 800:'#60564e', 900:'#514944' }
+      },
+      fontFamily: { sans:['Inter','sans-serif'], serif:['Playfair Display','serif'] }
+    }
+  }
+}
+</script>
+<style>
+[x-cloak] { display: none !important; }
+body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+.breath-circle { animation: breathe 8s ease-in-out infinite; }
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+.fade-in { animation: fadeIn 0.5s ease-out; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.pulse-soft { animation: pulseSoft 2s ease-in-out infinite; }
+@keyframes pulseSoft { 0%,100% { transform:scale(1); } 50% { transform:scale(1.05); } }
+.slide-up { animation: slideUp 0.4s ease-out; }
+@keyframes slideUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+.progress-ring { transition: stroke-dashoffset 0.5s ease; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: #d1d7c7; border-radius: 2px; }
+.glass { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+</style>
+</head>
+<body class="bg-sage-50 min-h-screen" x-data="app()" x-init="init()">
+
+<!-- Onboarding Screen -->
+<div x-show="screen === 'onboarding'" x-cloak class="min-h-screen flex flex-col items-center justify-center px-6 py-10 fade-in">
+  <div class="text-center max-w-sm mx-auto">
+    <div class="text-6xl mb-4">🌱</div>
+    <h1 class="font-serif text-3xl font-bold text-sage-800 mb-2">Micro-Mindfulness</h1>
+    <p class="text-sage-600 text-lg mb-8">for New Parents</p>
+    
+    <div class="space-y-4 text-left mb-8">
+      <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-sm">
+        <span class="text-2xl mt-0.5">🍼</span>
+        <div>
+          <p class="font-semibold text-sage-800 text-sm">Caregiving-Triggered</p>
+          <p class="text-sage-500 text-xs">1–3 min practices for feeding, diapering & more</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-sm">
+        <span class="text-2xl mt-0.5">💜</span>
+        <div>
+          <p class="font-semibold text-sage-800 text-sm">Emotionally Adaptive</p>
+          <p class="text-xs text-sage-500">Practices that meet you where you are right now</p>
+        </div>
+      </div>
+      <div class="flex items-start gap-3 bg-white rounded-2xl p-4 shadow-sm">
+        <span class="text-2xl mt-0.5">🤱</span>
+        <div>
+          <p class="font-semibold text-sage-800 text-sm">Bonding Focused</p>
+          <p class="text-xs text-sage-500">Strengthen attachment through presence</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3 mb-6">
+      <input x-model="onboarding.name" type="text" placeholder="Your first name ✨" class="w-full px-5 py-4 rounded-2xl bg-white border border-sage-200 text-sage-800 placeholder-sage-300 focus:outline-none focus:ring-2 focus:ring-sage-400 text-center text-lg">
+      
+      <select x-model="onboarding.stage" class="w-full px-5 py-4 rounded-2xl bg-white border border-sage-200 text-sage-800 focus:outline-none focus:ring-2 focus:ring-sage-400 text-center text-lg appearance-none">
+        <option value="" disabled>Your journey stage 🌟</option>
+        <option value="expecting">Expecting</option>
+        <option value="newborn">Newborn (0–3 months)</option>
+        <option value="infant">Infant (3–12 months)</option>
+        <option value="toddler">Toddler (1–2 years)</option>
+        <option value="supporter">Doula / Support Person</option>
+      </select>
+    </div>
+
+    <button @click="completeOnboarding()" :disabled="!onboarding.name || !onboarding.stage"
+      class="w-full py-4 rounded-2xl font-semibold text-lg text-white bg-sage-600 hover:bg-sage-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-lg shadow-sage-200 active:scale-95 min-h-[56px]">
+      Begin Your Practice 🌿
+    </button>
+  </div>
+</div>
+
+<!-- Main Home Screen -->
+<div x-show="screen === 'home'" x-cloak class="min-h-screen pb-24">
+  <!-- Header -->
+  <div class="glass sticky top-0 z-30 px-5 py-4 border-b border-sage-100">
+    <div class="flex items-center justify-between max-w-lg mx-auto">
+      <div>
+        <h1 class="font-serif text-xl font-bold text-sage-800">🌱 Micro-Mindfulness</h1>
+        <p class="text-xs text-sage-500" x-text="getGreeting()"></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="bg-cream-100 text-cream-700 text-xs font-semibold px-3 py-1.5 rounded-full" x-text="'🔥 ' + userData.streak + 'd'"></span>
+        <button @click="screen='settings'" class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-600 hover:bg-sage-200 transition">
+          ⚙️
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-lg mx-auto px-5 pt-5 space-y-5">
+    <!-- Check-In Card -->
+    <div x-show="!todayCheckedIn" class="bg-gradient-to-br from-lavender-50 to-blush-50 rounded-3xl p-6 shadow-sm border border-lavender-100 slide-up">
+      <p class="text-sage-700 font-medium mb-3">How are you feeling right now? 💭</p>
+      <div class="grid grid-cols-5 gap-2 mb-4">
+        <template x-for="mood in moods" :key="mood.emoji">
+          <button @click="selectMood(mood)" 
+            :class="selectedMood?.label === mood.label ? 'ring-2 ring-sage-500 bg-white scale-110' : 'bg-white/60'"
+            class="flex flex-col items-center py-3 rounded-2xl transition-all active:scale-95 min-h-[64px]">
+            <span class="text-2xl" x-text="mood.emoji"></span>
+            <span class="text-[10px] text-sage-500 mt-1" x-text="mood.label"></span>
+          </button>
+        </template>
+      </div>
+      <button x-show="selectedMood" @click="doCheckIn()" 
+        class="w-full py-3 rounded-xl bg-sage-600 text-white font-medium hover:bg-sage-700 transition active:scale-95 fade-in">
+        Check In ✨
+      </button>
+    </div>
+
+    <div x-show="todayCheckedIn" class="bg-white rounded-3xl p-5 shadow-sm border border-sage-100 text-center">
+      <p class="text-sage-600 text-sm">Today you're feeling <span class="font-semibold" x-text="selectedMood?.emoji + ' ' + selectedMood?.label"></span></p>
+      <button @click="todayCheckedIn=false; selectedMood=null" class="text-sage-400 text-xs mt-1 underline">update</button>
+    </div>
+
+    <!-- Quick Practice Triggers -->
+    <div>
+      <h2 class="font-serif text-lg font-semibold text-sage-800 mb-3">What's happening now? 🍼</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <template x-for="trigger in triggers" :key="trigger.id">
+          <button @click="startPractice(trigger)" 
+            class="bg-white rounded-2xl p-4 shadow-sm border border-sage-100 hover:shadow-md hover:border-sage-300 transition-all active:scale-95 text-left min-h-[100px] flex flex-col justify-between">
+            <span class="text-3xl" x-text="trigger.emoji"></span>
+            <div>
+              <p class="font-semibold text-sage-800 text-sm" x-text="trigger.label"></p>
+              <p class="text-sage-400 text-[11px]" x-text="trigger.duration + ' min'"></p>
+            </div>
+          </button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Adaptive Practice (AI-powered) -->
+    <div class="bg-gradient-to-br from-sage-100 to-sage-50 rounded-3xl p-6 shadow-sm border border-sage-200">
+      <div class="flex items-start gap-3">
+        <div class="w-12 h-12 rounded-full bg-sage-300 flex items-center justify-center text-2xl flex-shrink-0 pulse-soft">🧘</div>
+        <div class="flex-1">
+          <h3 class="font-semibold text-sage-800">Personalized Practice</h3>
+          <p class="text-sage-500 text-sm mt-1">Tell me what you need, and I'll create the perfect micro-practice for you.</p>
+          <div class="mt-3 flex gap-2">
+            <input x-model="customRequest" type="text" placeholder="e.g., help me feel calm during a fussy moment" 
+              class="flex-1 px-4 py-3 rounded-xl bg-white border border-sage-200 text-sage-800 text-sm placeholder-sage-300 focus:outline-none focus:ring-2 focus:ring-sage-400"
+              @keyup.enter="generateCustomPractice()">
+            <button @click="generateCustomPractice()" :disabled="!customRequest || loading"
+              class="px-4 py-3 rounded-xl bg-sage-600 text-white font-medium hover:bg-sage-700 disabled:opacity-40 transition active:scale-95 min-w-[56px] flex items-center justify-center">
+              <span x-show="!loading">✨</span>
+              <span x-show="loading" class="animate-spin">⏳</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Practices / Reflections -->
+    <div x-show="userData.sessions.length > 0">
+      <h2 class="font-serif text-lg font-semibold text-sage-800 mb-3">Your Journey 🌿</h2>
+      <div class="space-y-2">
+        <template x-for="session in userData.sessions.slice(-5).reverse()" :key="session.timestamp">
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-sage-100 flex items-center gap-3">
+            <span class="text-2xl" x-text="session.emoji || '🌸'"></span>
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-sage-800 text-sm truncate" x-text="session.title"></p>
+              <p class="text-sage-400 text-xs" x-text="formatDate(session.timestamp)"></p>
+            </div>
+            <span class="text-sage-300 text-xs whitespace-nowrap" x-text="session.duration + ' min'"></span>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Daily Insight -->
+    <div class="bg-cream-50 rounded-3xl p-5 border border-cream-200 text-center mb-6">
+      <p class="text-cream-700 text-sm italic" x-text="dailyInsight">✨ Every caregiving moment is a chance to be present with your little one.</p>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="fixed bottom-0 left-0 right-0 glass border-t border-sage-100 z-30">
+    <div class="max-w-lg mx-auto flex justify-around py-3">
+      <button @click="screen='home'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🏠</span>
+        <span class="text-[10px] text-sage-600 font-medium">Home</span>
+      </button>
+      <button @click="screen='breathe'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🌬️</span>
+        <span class="text-[10px] text-sage-500">Breathe</span>
+      </button>
+      <button @click="screen='reflections'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📝</span>
+        <span class="text-[10px] text-sage-500">Reflect</span>
+      </button>
+      <button @click="screen='stats'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📊</span>
+        <span class="text-[10px] text-sage-500">Growth</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Practice Screen -->
+<div x-show="screen === 'practice'" x-cloak class="min-h-screen bg-gradient-to-b from-sage-50 via-sage-100 to-sage-50 flex flex-col">
+  <div class="px-5 pt-6 pb-4 flex items-center">
+    <button @click="endPractice()" class="w-10 h-10 rounded-full bg-white/80 flex items-center justify-center text-sage-600 active:scale-95">←</button>
+    <div class="flex-1 text-center">
+      <p class="text-sage-500 text-sm" x-text="currentPractice?.label || 'Practice'"></p>
+    </div>
+    <div class="w-10"></div>
+  </div>
+
+  <div class="flex-1 flex flex-col items-center justify-center px-6 max-w-lg mx-auto w-full">
+    <!-- Timer Circle -->
+    <div class="relative mb-8">
+      <svg class="w-48 h-48 -rotate-90" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#e8ebe3" stroke-width="4"/>
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#7a8966" stroke-width="4" 
+          stroke-linecap="round" class="progress-ring"
+          :stroke-dasharray="339.292"
+          :stroke-dashoffset="339.292 * (1 - practiceProgress)"/>
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <span class="text-4xl mb-1" x-text="currentPractice?.emoji || '🌸'"></span>
+        <span class="font-serif text-2xl font-bold text-sage-800" x-text="formatTimer(practiceTimeLeft)"></span>
+      </div>
+    </div>
+
+    <!-- Guidance Text -->
+    <div class="text-center mb-8 min-h-[120px] flex items-center">
+      <p class="text-sage-700 text-lg leading-relaxed fade-in" x-text="currentGuidance" :key="currentGuidanceIndex">
+      </p>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex items-center gap-4">
+      <button @click="togglePractice()" 
+        class="w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-lg active:scale-95 transition"
+        :class="practiceRunning ? 'bg-blush-400 text-white' : 'bg-sage-600 text-white'">
+        <span x-text="practiceRunning ? '⏸' : '▶️'"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Practice Complete Screen -->
+<div x-show="screen === 'complete'" x-cloak class="min-h-screen bg-gradient-to-b from-lavender-50 to-sage-50 flex flex-col items-center justify-center px-6">
+  <div class="text-center max-w-sm slide-up">
+    <div class="text-6xl mb-4">🌟</div>
+    <h2 class="font-serif text-2xl font-bold text-sage-800 mb-2">Beautiful Practice</h2>
+    <p class="text-sage-500 mb-6" x-text="completionMessage"></p>
+    
+    <!-- Micro-Reflection -->
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-sage-100 mb-6 text-left">
+      <p class="text-sage-600 text-sm font-medium mb-3" x-text="reflectionPrompt || 'What did you notice during this practice? 💭'"></p>
+      <textarea x-model="reflectionText" rows="3" placeholder="Share your thoughts (optional)..." 
+        class="w-full px-4 py-3 rounded-xl bg-sage-50 border border-sage-200 text-sage-800 text-sm placeholder-sage-300 focus:outline-none focus:ring-2 focus:ring-sage-400 resize-none"></textarea>
+    </div>
+
+    <div class="space-y-3">
+      <button @click="saveReflection()" class="w-full py-4 rounded-2xl bg-sage-600 text-white font-semibold hover:bg-sage-700 transition active:scale-95 shadow-lg">
+        Save & Continue 🌿
+      </button>
+      <button @click="screen='home'; reflectionText=''" class="w-full py-3 rounded-2xl text-sage-500 font-medium hover:bg-white transition active:scale-95">
+        Skip for now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Breathe Screen -->
+<div x-show="screen === 'breathe'" x-cloak class="min-h-screen bg-gradient-to-b from-lavender-50 via-white to-sage-50 flex flex-col pb-24">
+  <div class="px-5 pt-6 pb-4 flex items-center">
+    <button @click="screen='home'; stopBreathing()" class="w-10 h-10 rounded-full bg-white/80 flex items-center justify-center text-sage-600 active:scale-95">←</button>
+    <h2 class="flex-1 text-center font-serif text-lg font-semibold text-sage-800">Breathing Space</h2>
+    <div class="w-10"></div>
+  </div>
+
+  <div class="flex-1 flex flex-col items-center justify-center px-6">
+    <div class="relative w-56 h-56 flex items-center justify-center mb-8">
+      <div class="absolute inset-0 rounded-full bg-lavender-200 breath-circle opacity-30" :class="breathingActive ? '' : 'animation-paused'" 
+        :style="breathingActive ? '' : 'animation-play-state: paused'"></div>
+      <div class="absolute inset-4 rounded-full bg-lavender-300 breath-circle opacity-40" style="animation-delay: -1s"
+        :style="breathingActive ? 'animation-delay: -1s' : 'animation-play-state: paused; animation-delay: -1s'"></div>
+      <div class="relative z-10 text-center">
+        <p class="text-2xl font-serif font-semibold text-lavender-700" x-text="breathPhase"></p>
+        <p class="text-lavender-400 text-sm mt-1" x-text="breathCount > 0 ? 'Breath ' + breathCount : ''"></p>
+      </div>
+    </div>
+
+    <p class="text-sage-500 text-sm text-center mb-6 max-w-xs">A calming breath practice you can do while holding, feeding, or resting with baby.</p>
+
+    <div class="flex gap-3 mb-4">
+      <template x-for="pattern in breathPatterns" :key="pattern.name">
+        <button @click="selectedBreathPattern = pattern" 
+          :class="selectedBreathPattern.name === pattern.name ? 'bg-lavender-500 text-white' : 'bg-white text-sage-600'"
+          class="px-4 py-2 rounded-xl text-sm font-medium border border-lavender-200 transition active:scale-95 min-h-[44px]">
+          <span x-text="pattern.name"></span>
+        </button>
+      </template>
+    </div>
+
+    <button @click="toggleBreathing()" 
+      class="w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-lg active:scale-95 transition"
+      :class="breathingActive ? 'bg-blush-400 text-white' : 'bg-lavender-500 text-white'">
+      <span x-text="breathingActive ? '⏹' : '▶️'"></span>
+    </button>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="fixed bottom-0 left-0 right-0 glass border-t border-sage-100 z-30">
+    <div class="max-w-lg mx-auto flex justify-around py-3">
+      <button @click="screen='home'; stopBreathing()" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🏠</span>
+        <span class="text-[10px] text-sage-500">Home</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🌬️</span>
+        <span class="text-[10px] text-sage-600 font-medium">Breathe</span>
+      </button>
+      <button @click="screen='reflections'; stopBreathing()" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📝</span>
+        <span class="text-[10px] text-sage-500">Reflect</span>
+      </button>
+      <button @click="screen='stats'; stopBreathing()" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📊</span>
+        <span class="text-[10px] text-sage-500">Growth</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Reflections Screen -->
+<div x-show="screen === 'reflections'" x-cloak class="min-h-screen pb-24">
+  <div class="glass sticky top-0 z-30 px-5 py-4 border-b border-sage-100">
+    <div class="flex items-center max-w-lg mx-auto">
+      <button @click="screen='home'" class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-600 active:scale-95">←</button>
+      <h2 class="flex-1 text-center font-serif text-lg font-semibold text-sage-800">Reflections 📝</h2>
+      <div class="w-10"></div>
+    </div>
+  </div>
+
+  <div class="max-w-lg mx-auto px-5 pt-5">
+    <div x-show="userData.reflections.length === 0" class="text-center py-16">
+      <div class="text-5xl mb-4">🌸</div>
+      <p class="text-sage-500">Your reflections will appear here after practices.</p>
+      <p class="text-sage-400 text-sm mt-2">Start a practice to begin your journey.</p>
+    </div>
+
+    <div class="space-y-3">
+      <template x-for="ref in userData.reflections.slice().reverse()" :key="ref.timestamp">
+        <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100 fade-in">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg" x-text="ref.emoji || '🌿'"></span>
+            <span class="font-medium text-sage-800 text-sm" x-text="ref.practiceTitle || 'Reflection'"></span>
+            <span class="text-sage-300 text-xs ml-auto" x-text="formatDate(ref.timestamp)"></span>
+          </div>
+          <p class="text-sage-600 text-sm leading-relaxed" x-text="ref.text"></p>
+          <div x-show="ref.mood" class="mt-2">
+            <span class="text-xs bg-sage-50 text-sage-500 px-2 py-1 rounded-full" x-text="ref.mood"></span>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <div class="fixed bottom-0 left-0 right-0 glass border-t border-sage-100 z-30">
+    <div class="max-w-lg mx-auto flex justify-around py-3">
+      <button @click="screen='home'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🏠</span>
+        <span class="text-[10px] text-sage-500">Home</span>
+      </button>
+      <button @click="screen='breathe'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🌬️</span>
+        <span class="text-[10px] text-sage-500">Breathe</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📝</span>
+        <span class="text-[10px] text-sage-600 font-medium">Reflect</span>
+      </button>
+      <button @click="screen='stats'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📊</span>
+        <span class="text-[10px] text-sage-500">Growth</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Stats Screen -->
+<div x-show="screen === 'stats'" x-cloak class="min-h-screen pb-24">
+  <div class="glass sticky top-0 z-30 px-5 py-4 border-b border-sage-100">
+    <div class="flex items-center max-w-lg mx-auto">
+      <button @click="screen='home'" class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-600 active:scale-95">←</button>
+      <h2 class="flex-1 text-center font-serif text-lg font-semibold text-sage-800">Your Growth 📊</h2>
+      <div class="w-10"></div>
+    </div>
+  </div>
+
+  <div class="max-w-lg mx-auto px-5 pt-5 space-y-4">
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100 text-center">
+        <p class="text-3xl font-bold text-sage-700" x-text="userData.sessions.length">0</p>
+        <p class="text-sage-400 text-xs mt-1">Total Sessions</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100 text-center">
+        <p class="text-3xl font-bold text-sage-700" x-text="userData.streak">0</p>
+        <p class="text-sage-400 text-xs mt-1">Day Streak 🔥</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100 text-center">
+        <p class="text-3xl font-bold text-sage-700" x-text="totalMinutes()">0</p>
+        <p class="text-sage-400 text-xs mt-1">Minutes Present</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100 text-center">
+        <p class="text-3xl font-bold text-sage-700" x-text="userData.reflections.length">0</p>
+        <p class="text-sage-400 text-xs mt-1">Reflections</p>
+      </div>
+    </div>
+
+    <!-- Mood History -->
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-sage-100">
+      <h3 class="font-semibold text-sage-800 mb-3">Mood Journey</h3>
+      <div x-show="userData.moodHistory.length === 0" class="text-center py-4">
+        <p class="text-sage-400 text-sm">Check in daily to see your mood journey 💜</p>
+      </div>
+      <div class="flex items-end gap-1 h-24">
+        <template x-for="(m, i) in userData.moodHistory.slice(-14)" :key="i">
+          <div class="flex-1 flex flex-col items-center justify-end h-full">
+            <span class="text-sm" x-text="m.emoji"></span>
+            <div class="w-full rounded-t-sm mt-1" 
+              :style="'height: ' + (m.value * 20) + '%; background-color: ' + moodColor(m.value)"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Favorite Practices -->
+    <div class="bg-white rounded-3xl p-5 shadow-sm border border-sage-100">
+      <h3 class="font-semibold text-sage-800 mb-3">Most Practiced</h3>
+      <template x-for="fav in topPractices()" :key="fav.label">
+        <div class="flex items-center gap-3 py-2">
+          <span class="text-xl" x-text="fav.emoji"></span>
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm text-sage-700" x-text="fav.label"></span>
+              <span class="text-xs text-sage-400" x-text="fav.count + 'x'"></span>
+            </div>
+            <div class="h-2 bg-sage-100 rounded-full overflow-hidden">
+              <div class="h-full bg-sage-400 rounded-full transition-all" :style="'width: ' + fav.pct + '%'"></div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <p x-show="topPractices().length === 0" class="text-sage-400 text-sm text-center py-3">Complete practices to see your favorites 🌿</p>
+    </div>
+  </div>
+
+  <div class="fixed bottom-0 left-0 right-0 glass border-t border-sage-100 z-30">
+    <div class="max-w-lg mx-auto flex justify-around py-3">
+      <button @click="screen='home'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🏠</span>
+        <span class="text-[10px] text-sage-500">Home</span>
+      </button>
+      <button @click="screen='breathe'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">🌬️</span>
+        <span class="text-[10px] text-sage-500">Breathe</span>
+      </button>
+      <button @click="screen='reflections'" class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📝</span>
+        <span class="text-[10px] text-sage-500">Reflect</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 min-w-[60px] min-h-[44px]">
+        <span class="text-xl">📊</span>
+        <span class="text-[10px] text-sage-600 font-medium">Growth</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Screen -->
+<div x-show="screen === 'settings'" x-cloak class="min-h-screen pb-10">
+  <div class="glass sticky top-0 z-30 px-5 py-4 border-b border-sage-100">
+    <div class="flex items-center max-w-lg mx-auto">
+      <button @click="screen='home'" class="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center text-sage-600 active:scale-95">←</button>
+      <h2 class="flex-1 text-center font-serif text-lg font-semibold text-sage-800">Settings ⚙️</h2>
+      <div class="w-10"></div>
+    </div>
+  </div>
+
+  <div class="max-w-lg mx-auto px-5 pt-5 space-y-4">
+    <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100">
+      <label class="text-sage-600 text-sm font-medium mb-2 block">Name</label>
+      <input x-model="userData.name" @change="saveData()" type="text" class="w-full px-4 py-3 rounded-xl bg-sage-50 border border-sage-200 text-sage-800 focus:outline-none focus:ring-2 focus:ring-sage-400">
+    </div>
+
+    <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100">
+      <label class="text-sage-600 text-sm font-medium mb-2 block">Journey Stage</label>
+      <select x-model="userData.stage" @change="saveData()" class="w-full px-4 py-3 rounded-xl bg-sage-50 border border-sage-200 text-sage-800 focus:outline-none focus:ring-2 focus:ring-sage-400">
+        <option value="expecting">Expecting</option>
+        <option value="newborn">Newborn (0–3 months)</option>
+        <option value="infant">Infant (3–12 months)</option>
+        <option value="toddler">Toddler (1–2 years)</option>
+        <option value="supporter">Doula / Support Person</option>
+      </select>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5 shadow-sm border border-sage-100">
+      <label class="text-sage-600 text-sm font-medium mb-2 block">Baby's Name (optional)</label>
+      <input x-model="userData.babyName" @change="saveData()" type="text" placeholder="Your little one's name 💛" class="w-full px-4 py-3 rounded-xl bg-sage-50 border border-sage-200 text-sage-800 placeholder-sage-300 focus:outline-none focus:ring-2 focus:ring-sage-400">
+    </div>
+
+    <button @click="if(confirm('This will reset all your data. Are you sure?')){resetData()}" 
+      class="w-full py-3 rounded-2xl text-blush-500 border border-blush-200 font-medium hover:bg-blush-50 transition active:scale-95">
+      Reset All Data
+    </button>
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div x-show="loading" x-cloak class="fixed inset-0 bg-sage-900/30 backdrop-blur-sm z-50 flex items-center justify-center">
+  <div class="bg-white rounded-3xl p-8 shadow-xl text-center max-w-xs mx-6">
+    <div class="text-4xl mb-3 animate-bounce">🌱</div>
+    <p class="text-sage-700 font-medium" x-text="loadingMessage">Creating your practice...</p>
+    <div class="mt-4 h-1.5 bg-sage-100 rounded-full overflow-hidden">
+      <div class="h-full bg-sage-500 rounded-full animate-pulse" style="width:60%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Toast -->
+<div x-show="errorMsg" x-cloak 
+  x-transition:enter="transition ease-out duration-300" 
+  x-transition:enter-start="opacity-0 translate-y-4"
+  x-transition:enter-end="opacity-100 translate-y-0"
+  class="fixed bottom-24 left-4 right-4 z-50 max-w-lg mx-auto">
+  <div class="bg-blush-50 border border-blush-200 rounded-2xl p-4 shadow-lg">
+    <div class="flex items-start gap-3">
+      <span class="text-xl">😔</span>
+      <div class="flex-1">
+        <p class="text-sm text-blush-700" x-text="errorMsg"></p>
+      </div>
+      <button @click="errorMsg=''" class="text-blush-400 text-lg">✕</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Global AI tracking
+window.aiTotalInputTokens = 0;
+window.aiTotalOutputTokens = 0;
+window.aiTotalTime = 0;
+window.aiTimeByAlias = {};
+
+function app() {
+  return {
+    screen: 'home',
+    loading: false,
+    loadingMessage: 'Creating your practice...',
+    errorMsg: '',
+    
+    onboarding: { name: '', stage: '' },
+    
+    userData: {
+      name: '',
+      stage: '',
+      babyName: '',
+      sessions: [],
+      reflections: [],
+      moodHistory: [],
+      streak: 0,
+      lastPracticeDate: null,
+      onboarded: false
+    },
+    
+    moods: [
+      { emoji: '😴', label: 'Exhausted', value: 1 },
+      { emoji: '😰', label: 'Anxious', value: 2 },
+      { emoji: '😐', label: 'Okay', value: 3 },
+      { emoji: '😊', label: 'Good', value: 4 },
+      { emoji: '🥰', label: 'Grateful', value: 5 }
+    ],
+    
+    selectedMood: null,
+    todayCheckedIn: false,
+    
+    triggers: [
+      { id: 'feeding', emoji: '🍼', label: 'Feeding Time', duration: 2, context: 'feeding your baby' },
+      { id: 'diaper', emoji: '👶', label: 'Diaper Change', duration: 1, context: 'changing a diaper' },
+      { id: 'wakeup', emoji: '🌅', label: 'Baby Waking', duration: 2, context: 'your baby waking up' },
+      { id: 'fussy', emoji: '😢', label: 'Fussy Moment', duration: 2, context: 'soothing a fussy baby' },
+      { id: 'naptime', emoji: '🌙', label: 'Nap Settling', duration: 3, context: 'settling baby for a nap' },
+      { id: 'selfcare', emoji: '💜', label: 'Self-Care', duration: 3, context: 'a moment just for yourself' }
+    ],
+    
+    currentPractice: null,
+    practiceTimeLeft: 0,
+    practiceTotalTime: 0,
+    practiceProgress: 0,
+    practiceRunning: false,
+    practiceTimer: null,
+    guidanceSteps: [],
+    currentGuidance: '',
+    currentGuidanceIndex: 0,
+    guidanceTimer: null,
+    
+    completionMessage: '',
+    reflectionPrompt: '',
+    reflectionText: '',
+    
+    customRequest: '',
+    dailyInsight: '✨ Every caregiving moment is a chance to be present with your little one.',
+    
+    // Breathing
+    breathPatterns: [
+      { name: 'Calm', inhale: 4, hold: 4, exhale: 6 },
+      { name: 'Box', inhale: 4, hold: 4, exhale: 4 },
+      { name: 'Quick', inhale: 2, hold: 0, exhale: 4 }
+    ],
+    selectedBreathPattern: { name: 'Calm', inhale: 4, hold: 4, exhale: 6 },
+    breathingActive: false,
+    breathPhase: 'Tap to start',
+    breathCount: 0,
+    breathInterval: null,
+    
+    init() {
+      const saved = localStorage.getItem('microMindfulness');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          this.userData = { ...this.userData, ...parsed };
+        } catch(e) {}
+      }
+      
+      if (!this.userData.onboarded) {
+        this.screen = 'onboarding';
+      } else {
+        this.screen = 'home';
+        this.checkStreak();
+        this.checkTodayMood();
+        this.loadDailyInsight();
+      }
+    },
+    
+    saveData() {
+      localStorage.setItem('microMindfulness', JSON.stringify(this.userData));
+    },
+    
+    resetData() {
+      localStorage.removeItem('microMindfulness');
+      this.userData = {
+        name: '', stage: '', babyName: '', sessions: [], reflections: [],
+        moodHistory: [], streak: 0, lastPracticeDate: null, onboarded: false
+      };
+      this.screen = 'onboarding';
+    },
+    
+    completeOnboarding() {
+      this.userData.name = this.onboarding.name;
+      this.userData.stage = this.onboarding.stage;
+      this.userData.onboarded = true;
+      this.saveData();
+      this.screen = 'home';
+      this.loadDailyInsight();
+    },
+    
+    getGreeting() {
+      const hour = new Date().getHours();
+      const name = this.userData.name || 'there';
+      if (hour < 6) return `Still up, ${name}? You're doing great 💜`;
+      if (hour < 12) return `Good morning, ${name} ☀️`;
+      if (hour < 17) return `Good afternoon, ${name} 🌤`;
+      if (hour < 21) return `Good evening, ${name} 🌸`;
+      return `Night time, ${name} 🌙`;
+    },
+    
+    selectMood(mood) {
+      this.selectedMood = mood;
+    },
+    
+    doCheckIn() {
+      this.todayCheckedIn = true;
+      this.userData.moodHistory.push({
+        emoji: this.selectedMood.emoji,
+        label: this.selectedMood.label,
+        value: this.selectedMood.value,
+        date: new Date().toISOString().split('T')[0],
+        timestamp: Date.now()
+      });
+      this.saveData();
+    },
+    
+    checkTodayMood() {
+      const today = new Date().toISOString().split('T')[0];
+      const todayMood = this.userData.moodHistory.find(m => m.date === today);
+      if (todayMood) {
+        this.todayCheckedIn = true;
+        this.selectedMood = this.moods.find(m => m.label === todayMood.label) || null;
+      }
+    },
+    
+    checkStreak() {
+      if (!this.userData.lastPracticeDate) return;
+      const last = new Date(this.userData.lastPracticeDate);
+      const now = new Date();
+      const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+      if (diffDays > 1) {
+        this.userData.streak = 0;
+        this.saveData();
+      }
+    },
+    
+    async callAI(prompt, retries = 3) {
+      const startTime = Date.now();
+      for (let i = 0; i < retries; i++) {
+        try {
+          const response = await fetch('https://16504442930.work/run_prompt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              alias: 'genericAI',
+              params: { prompt }
+            })
+          });
+          
+          if (!response.ok) {
+            const errText = await response.text();
+            if (i === retries - 1) {
+              // Format the error with AI
+              try {
+                const errFormatResp = await fetch('https://16504442930.work/run_prompt', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    alias: 'genericAI',
+                    params: { prompt: `Reformat this API error message to be user-friendly and empowering, helping the user understand what happened and what they can try. Include the full original response. Original error: ${errText}. Return a JSON object with key "friendlyError" as a string.` }
+                  })
+                });
+                const errData = await errFormatResp.json();
+                throw new Error(errData.friendlyError || errText);
+              } catch(fe) {
+                throw new Error(`Something went wrong. Please try again in a moment. (Details: ${errText})`);
+              }
+            }
+            continue;
+          }
+          
+          const data = await response.json();
+          const elapsed = Date.now() - startTime;
+          
+          // Track tokens/time
+          if (data.input_tokens) window.aiTotalInputTokens += data.input_tokens;
+          if (data.output_tokens) window.aiTotalOutputTokens += data.output_tokens;
+          window.aiTotalTime += elapsed;
+          if (!window.aiTimeByAlias['genericAI']) window.aiTimeByAlias['genericAI'] = 0;
+          window.aiTimeByAlias['genericAI'] += elapsed;
+          
+          return data;
+        } catch(e) {
+          if (i === retries - 1) throw e;
+          await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+        }
+      }
+    },
+    
+    async startPractice(trigger) {
+      this.loading = true;
+      this.loadingMessage = `Creating your ${trigger.label.toLowerCase()} practice...`;
+      
+      try {
+        const moodContext = this.selectedMood ? `The parent is currently feeling ${this.selectedMood.label} (${this.selectedMood.emoji}).` : 'The parent has not checked in their mood yet.';
+        const babyContext = this.userData.babyName ? `Their baby's name is ${this.userData.babyName}.` : '';
+        const stageContext = `They are in the ${this.userData.stage} stage.`;
+        
+        const prompt = `You are a mindfulness expert specializing in postpartum and new parent wellbeing. Create a ${trigger.duration}-minute micro-mindfulness practice for a new parent who is currently ${trigger.context}. ${moodContext} ${stageContext} ${babyContext}
+
+The practice should:
+1. Be doable while caring for the baby (hands may be occupied)
+2. Focus on present-moment awareness and strengthening parent-baby bond
+3. Include gentle body awareness, breath, and sensory grounding
+4. Be warm, compassionate, and non-judgmental
+5. Use second person ("you")
+
+Return a JSON object with exactly these keys and types:
+- "steps": an array of exactly 4 strings, each being a 1-2 sentence guidance instruction to read/follow sequentially during the practice
+- "completionMessage": a string of 1 encouraging sentence for after the practice
+- "reflectionPrompt": a string of 1 reflective question to deepen the bonding experience
+- "insight": a string of 1 brief inspirational thought about mindful parenting`;
+        
+        const data = await this.callAI(prompt);
+        
+        this.currentPractice = trigger;
+        this.guidanceSteps = data.steps || [
+          'Take a slow, deep breath. Feel your body supporting your baby.',
+          'Notice the warmth between you and your little one.',
+          'Let any tension soften. You are exactly where you need to be.',
+          'Bring gentle attention to this moment of connection.'
+        ];
+        this.completionMessage = data.completionMessage || 'Beautiful practice. You showed up for yourself and your baby. 💜';
+        this.reflectionPrompt = data.reflectionPrompt || 'What did you notice during this moment of presence?';
+        if (data.insight) this.dailyInsight = data.insight;
+        
+        this.practiceTotalTime = trigger.duration * 60;
+        this.practiceTimeLeft = this.practiceTotalTime;
+        this.practiceProgress = 0;
+        this.currentGuidanceIndex = 0;
+        this.currentGuidance = this.guidanceSteps[0];
+        
+        this.loading = false;
+        this.screen = 'practice';
+        
+        // Auto-start
+        setTimeout(() => this.startPracticeTimer(), 500);
+        
+      } catch(e) {
+        this.loading = false;
+        // Use fallback practice
+        this.currentPractice = trigger;
+        this.guidanceSteps = this.getFallbackGuidance(trigger);
+        this.completionMessage = 'You took a beautiful moment for presence. Well done. 💜';
+        this.reflectionPrompt = 'What did you notice during this practice?';
+        this.practiceTotalTime = trigger.duration * 60;
+        this.practiceTimeLeft = this.practiceTotalTime;
+        this.practiceProgress = 0;
+        this.currentGuidanceIndex = 0;
+        this.currentGuidance = this.guidanceSteps[0];
+        this.screen = 'practice';
+        setTimeout(() => this.startPracticeTimer(), 500);
+        this.errorMsg = 'Using offline practice. ' + (e.message || '');
+        setTimeout(() => this.errorMsg = '', 5000);
+      }
+    },
+    
+    getFallbackGuidance(trigger) {
+      const fallbacks = {
+        feeding: [
+          'As you settle into this feeding moment, take one slow, deep breath.',
+          'Feel the weight of your baby against you. Notice the warmth of connection.',
+          'Soften your shoulders, your jaw. You are nourishing a precious life.',
+          'With each breath, send love to yourself and your little one. You are enough.'
+        ],
+        diaper: [
+          'As you tend to your baby, take a breath and arrive in this moment.',
+          'Notice your baby\'s face, their tiny features. This is an act of love.',
+          'Feel your hands, gentle and capable. You are learning your baby\'s language.',
+          'Smile at your little one. This ordinary moment is extraordinary.'
+        ],
+        wakeup: [
+          'Your baby is stirring. Take a breath before you respond.',
+          'As you reach for your little one, notice the pull of love in your heart.',
+          'Greet your baby with soft eyes. "I\'m here. You are safe."',
+          'This new moment together is fresh and full of possibility.'
+        ],
+        fussy: [
+          'In this challenging moment, breathe deeply. You are not alone.',
+          'Your calm is your baby\'s anchor. Let your exhale be slow and long.',
+          'Place your hand on your heart. You are doing the hardest, most important work.',
+          'This will pass. Right now, just be here. Your presence is the gift.'
+        ],
+        naptime: [
+          'As you settle your baby, let your own body soften and slow.',
+          'Match your breathing to a gentle, sleepy rhythm.',
+          'Whisper kindness to yourself: "I am patient. I am present."',
+          'Feel the quiet settling around you both. Peace is here.'
+        ],
+        selfcare: [
+          'This moment is yours. Place your hands on your belly and breathe.',
+          'Scan your body gently. Where are you holding tension? Breathe into that space.',
+          'You are more than a caregiver. You are a whole person, worthy of care.',
+          'Set an intention of kindness toward yourself for the rest of this day.'
+        ]
+      };
+      return fallbacks[trigger.id] || fallbacks.selfcare;
+    },
+    
+    startPracticeTimer() {
+      this.practiceRunning = true;
+      this.practiceTimer = setInterval(() => {
+        if (this.practiceTimeLeft > 0) {
+          this.practiceTimeLeft--;
+          this.practiceProgress = 1 - (this.practiceTimeLeft / this.practiceTotalTime);
+          
+          // Advance guidance
+          const stepDuration = this.practiceTotalTime / this.guidanceSteps.length;
+          const expectedIndex = Math.min(
+            Math.floor((this.practiceTotalTime - this.practiceTimeLeft) / stepDuration),
+            this.guidanceSteps.length - 1
+          );
+          if (expectedIndex !== this.currentGuidanceIndex) {
+            this.currentGuidanceIndex = expectedIndex;
+            this.currentGuidance = this.guidanceSteps[expectedIndex];
+          }
+        } else {
+          this.completePractice();
+        }
+      }, 1000);
+    },
+    
+    togglePractice() {
+      if (this.practiceRunning) {
+        clearInterval(this.practiceTimer);
+        this.practiceRunning = false;
+      } else {
+        this.startPracticeTimer();
+      }
+    },
+    
+    completePractice() {
+      clearInterval(this.practiceTimer);
+      clearInterval(this.guidanceTimer);
+      this.practiceRunning = false;
+      
+      const today = new Date().toISOString().split('T')[0];
+      if (this.userData.lastPracticeDate !== today) {
+        if (this.userData.lastPracticeDate) {
+          const last = new Date(this.userData.lastPracticeDate);
+          const now = new Date();
+          const diffDays = Math.floor((now - last) / (1000 * 60 * 60 * 24));
+          this.userData.streak = diffDays <= 1 ? this.userData.streak + 1 : 1;
+        } else {
+          this.userData.streak = 1;
+        }
+      }
+      this.userData.lastPracticeDate = today;
+      
+      this.userData.sessions.push({
+        title: this.currentPractice.label,
+        emoji: this.currentPractice.emoji,
+        duration: this.currentPractice.duration,
+        timestamp: Date.now(),
+        mood: this.selectedMood?.label || null
+      });
+      
+      this.saveData();
+      this.screen = 'complete';
+    },
+    
+    endPractice() {
+      clearInterval(this.practiceTimer);
+      clearInterval(this.guidanceTimer);
+      this.practiceRunning = false;
+      
+      if (this.practiceProgress > 0.3) {
+        this.completePractice();
+      } else {
+        this.screen = 'home';
+      }
+    },
+    
+    saveReflection() {
+      if (this.reflectionText.trim()) {
+        this.userData.reflections.push({
+          text: this.reflectionText.trim(),
+          practiceTitle: this.currentPractice?.label || 'Practice',
+          emoji: this.currentPractice?.emoji || '🌿',
+          mood: this.selectedMood?.label || null,
+          timestamp: Date.now()
+        });
+        this.saveData();
+      }
+      this.reflectionText = '';
+      this.screen = 'home';
+    },
+    
+    async generateCustomPractice() {
+      if (!this.customRequest.trim()) return;
+      
+      this.loading = true;
+      this.loadingMessage = 'Crafting a personalized practice for you...';
+      
+      try {
+        const moodContext = this.selectedMood ? `Currently feeling ${this.selectedMood.label}.` : '';
+        const babyContext = this.userData.babyName ? `Baby's name: ${this.userData.babyName}.` : '';
+        
+        const prompt = `You are a compassionate mindfulness expert for new parents. A parent says: "${this.customRequest}". ${moodContext} They are in the ${this.userData.stage || 'new parent'} stage. ${babyContext}
+
+Create a 2-minute micro-mindfulness practice tailored to their request. It should be:
+1. Practical and doable while caring for a baby
+2. Warm, gentle, and non-judgmental
+3. Focus on present-moment awareness
+4. Support attachment and bonding when relevant
+
+Return a JSON object with exactly these keys and types:
+- "title": a string, short catchy title for this practice (max 5 words)
+- "emoji": a string, single emoji that represents this practice
+- "steps": an array of exactly 4 strings, each a 1-2 sentence guidance instruction
+- "completionMessage": a string, 1 encouraging sentence
+- "reflectionPrompt": a string, 1 reflective question`;
+        
+        const data = await this.callAI(prompt);
+        
+        const customTrigger = {
+          id: 'custom',
+          emoji: data.emoji || '✨',
+          label: data.title || 'Custom Practice',
+          duration: 2,
+          context: this.customRequest
+        };
+        
+        this.currentPractice = customTrigger;
+        this.guidanceSteps = data.steps || this.getFallbackGuidance({ id: 'selfcare' });
+        this.completionMessage = data.completionMessage || 'Beautiful. You honored your needs. 💜';
+        this.reflectionPrompt = data.reflectionPrompt || 'What shifted in you during this practice?';
+        
+        this.practiceTotalTime = 120;
+        this.practiceTimeLeft = 120;
+        this.practiceProgress = 0;
+        this.currentGuidanceIndex = 0;
+        this.currentGuidance = this.guidanceSteps[0];
+        
+        this.loading = false;
+        this.customRequest = '';
+        this.screen = 'practice';
+        setTimeout(() => this.startPracticeTimer(), 500);
+        
+      } catch(e) {
+        this.loading = false;
+        this.errorMsg = e.message || 'Could not create your practice. Please try again.';
+        setTimeout(() => this.errorMsg = '', 5000);
+      }
+    },
+    
+    async loadDailyInsight() {
+      const today = new Date().toISOString().split('T')[0];
+      const savedInsight = localStorage.getItem('dailyInsight_date');
+      const savedText = localStorage.getItem('dailyInsight_text');
+      
+      if (savedInsight === today && savedText) {
+        this.dailyInsight = savedText;
+        return;
+      }
+      
+      try {
+        const stageText = {
+          expecting: 'expecting a baby',
+          newborn: 'caring for a newborn',
+          infant: 'caring for an infant',
+          toddler: 'caring for a toddler',
+          supporter: 'supporting new parents as a doula'
+        };
+        
+        const prompt = `Generate a single brief, warm, inspirational quote or insight about mindful parenting for someone who is ${stageText[this.userData.stage] || 'a new parent'}. It should feel like a gentle reminder from a wise friend. Max 25 words. Return a JSON object with key "insight" as a string.`;
+        
+        const data = await this.callAI(prompt);
+        if (data.insight) {
+          this.dailyInsight = '✨ ' + data.insight;
+          localStorage.setItem('dailyInsight_date', today);
+          localStorage.setItem('dailyInsight_text', this.dailyInsight);
+        }
+      } catch(e) {
+        // Silent fail, keep default
+      }
+    },
+    
+    formatTimer(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    },
+    
+    formatDate(timestamp) {
+      const d = new Date(timestamp);
+      const now = new Date();
+      const diffMs = now - d;
+      const diffMins = Math.floor(diffMs / 60000);
+      if (diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins}m ago`;
+      const diffHours = Math.floor(diffMins / 60);
+      if (diffHours < 24) return `${diffHours}h ago`;
+      const diffDays = Math.floor(diffHours / 24);
+      if (diffDays === 1) return 'Yesterday';
+      if (diffDays < 7) return `${diffDays}d ago`;
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    },
+    
+    totalMinutes() {
+      return this.userData.sessions.reduce((sum, s) => sum + (s.duration || 0), 0);
+    },
+    
+    topPractices() {
+      const counts = {};
+      this.userData.sessions.forEach(s => {
+        if (!counts[s.title]) counts[s.title] = { label: s.title, emoji: s.emoji, count: 0 };
+        counts[s.title].count++;
+      });
+      const arr = Object.values(counts).sort((a, b) => b.count - a.count).slice(0, 4);
+      const maxCount = arr.length > 0 ? arr[0].count : 1;
+      return arr.map(a => ({ ...a, pct: (a.count / maxCount) * 100 }));
+    },
+    
+    moodColor(value) {
+      const colors = { 1: '#ea8c77', 2: '#f3b5a7', 3: '#fde4a4', 4: '#b3bda3', 5: '#7a8966' };
+      return colors[value] || '#d1d7c7';
+    },
+    
+    // Breathing
+    toggleBreathing() {
+      if (this.breathingActive) {
+        this.stopBreathing();
+      } else {
+        this.startBreathing();
+      }
+    },
+    
+    startBreathing() {
+      this.breathingActive = true;
+      this.breathCount = 0;
+      this.runBreathCycle();
+    },
+    
+    stopBreathing() {
+      this.breathingActive = false;
+      this.breathPhase = 'Tap to start';
+      this.breathCount = 0;
+      clearTimeout(this.breathInterval);
+    },
+    
+    runBreathCycle() {
+      if (!this.breathingActive) return;
+      
+      const p = this.selectedBreathPattern;
+      this.breathCount++;
+      
+      // Inhale
+      this.breathPhase = 'Breathe In...';
+      this.breathInterval = setTimeout(() => {
+        if (!this.breathingActive) return;
+        
+        if (p.hold > 0) {
+          // Hold
+          this.breathPhase = 'Hold...';
+          this.breathInterval = setTimeout(() => {
+            if (!this.breathingActive) return;
+            
+            // Exhale
+            this.breathPhase = 'Breathe Out...';
+            this.breathInterval = setTimeout(() => {
+              if (!this.breathingActive) return;
+              this.runBreathCycle();
+            }, p.exhale * 1000);
+            
+          }, p.hold * 1000);
+        } else {
+          // Exhale directly
+          this.breathPhase = 'Breathe Out...';
+          this.breathInterval = setTimeout(() => {
+            if (!this.breathingActive) return;
+            this.runBreathCycle();
+          }, p.exhale * 1000);
+        }
+        
+      }, p.inhale * 1000);
+    }
+  };
+}
+</script>
+
+</body>
+</html>
